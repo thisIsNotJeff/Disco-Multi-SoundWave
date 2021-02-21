@@ -35,7 +35,8 @@
             "serverpath": ".comp2300/discoserver",
             "postLaunchCommands": [
                 "-break-insert -t main"
-            ]
+            ],
+            "runToMain": true
         }
     ]
 }
