@@ -16,7 +16,7 @@
         {
             "type": "shell",
             "label": "upload",
-            "command": "make",
+            "command": "make upload",
             "problemMatcher": []
         }
     ]
