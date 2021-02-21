@@ -4,6 +4,7 @@ build-check:
   tags:
     - comp2300
   script:
+    - echo $COMP2300
     - make
 
 pledge-of-integrity:
