@@ -19,14 +19,6 @@ TARGET ?= program.elf
 
 all: $(TARGET)
 
-.PHONY: check_home
-check_home:
-	echo hello $(H)
-
-	ifndef H
-		$(error something is not good)
-	endif
-
 $(TARGET): $(OBJS)
 	$(LD) $(LDFLAGS) $^ -o $@
 
