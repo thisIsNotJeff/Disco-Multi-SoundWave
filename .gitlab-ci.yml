@@ -1,4 +1,4 @@
-image: comp2300/comp2300-ci:2021-v1
+image: comp2300/comp2300-ci:2021-v2
 
 build-check:
   tags:
