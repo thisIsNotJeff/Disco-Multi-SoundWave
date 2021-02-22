@@ -1,4 +1,5 @@
-COMP2300 ?= $(shell echo ~/.comp2300)
+H=$(or $(HOME),$(USERPROFILE),/ask/a/tutor/for/help)
+COMP2300 ?= $(H)/.comp2300
 
 ARM_PREFIX=$(COMP2300)/arm-none-eabi/bin/arm-none-eabi-
 
@@ -17,6 +18,14 @@ LDFLAGS ?=-nostdlib -nostartfiles -T lib/link.ld --print-memory-usage
 TARGET ?= program.elf
 
 all: $(TARGET)
+
+.PHONY: check_home
+check_home:
+	echo hello $(H)
+
+	ifndef H
+		$(error something is not good)
+	endif
 
 $(TARGET): $(OBJS)
 	$(LD) $(LDFLAGS) $^ -o $@
