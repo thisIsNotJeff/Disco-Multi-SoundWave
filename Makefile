@@ -19,19 +19,19 @@ TARGET=program.elf
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) $^ -o $@
+	"$(LD)" $(LDFLAGS) $^ -o $@
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+	"$(CC)" $(CFLAGS) -o $@ -c $<
 
 %.o: %.S
-	$(CC) $(CFLAGS) -o $@ -c $<
+	"$(CC)" $(CFLAGS) -o $@ -c $<
 
 .PHONY: upload
 upload: $(TARGET)
-	$(OBJCOPY) -O binary $(TARGET) program.bin
+	"$(OBJCOPY)" -O binary $(TARGET) program.bin
 
-	$(OPENOCD) -f board/stm32l4discovery.cfg -c "program program.elf verify reset exit"
+	"$(OPENOCD)" -f board/stm32l4discovery.cfg -c "program program.elf verify reset exit"
 
 clean:
 	rm $(TARGET) $(OBJS) >/dev/null 2>/dev/null || true
