@@ -49,6 +49,14 @@ SECTIONS {
         _text_end = .;
     } > FLASH
 
+    /* Then insert any .rodata (read only data) sections */
+    .rodata : {
+        . = ALIGN(4);
+        _rodata_start = .;
+        *(.rodata)
+        _rodata_end = .;
+    } > FLASH
+
     /* Then we insert all the .data sections */
     .data : {
         . = ALIGN(4);
