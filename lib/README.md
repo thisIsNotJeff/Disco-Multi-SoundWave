@@ -4,6 +4,26 @@ constructs will be taught eventually, so you might not understand everything at 
 Don't add anything here, put your own source files in the src folder.
 
 
+## libcomp2300/
+
+Various utility functions and macros for you to use
+
+
+## audio.S
+
+Audio configuration functions.
+
+
+## clock.S
+
+Clock configuration functions. Primarily used to raise the CPU clock speed from 4MHz to 80MHz.
+
+
+## init.S
+
+Exports `init` to handle initialisation of the clock and audio for you.
+
+
 ## startup.S
 
 This file performs some initialisation required to make the board work as expected. It initialises

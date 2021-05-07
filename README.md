@@ -1,3 +1,3 @@
-# comp2300-2021-template
+# COMP2300 Assignment 3
 
-this is the template README.md file! edit me.
+<https://cs.anu.edu.au/courses/comp2300/deliverables/03-networked-instrument/>
