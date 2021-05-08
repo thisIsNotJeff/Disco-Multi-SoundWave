@@ -18,7 +18,7 @@
 .set BSP_SAMPLE_FREQ,     48000
 .set FREQ_SCALING_FACTOR, 100
 
-.include "libcomp2300/macros.S"
+.include "src/libcomp2300/macros.S"
 
 .type wave_play_next_sample, %function
 @ Play the next sample of the currently set wave

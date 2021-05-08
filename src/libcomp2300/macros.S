@@ -2,7 +2,7 @@
 
 @ These macros are defined to be simple wrappers for function calls.
 @ to use them, add the following line to your main.S file
-@   .include "libcomp2300/macros.S"
+@   .include "src/libcomp2300/macros.S"
 @
 @ These macros uses definitions in utils.S, bitops.S and symbols.S
 

@@ -3,7 +3,7 @@
 @ --------------------- Module Interface --------------------
 .global joystick_init
 
-.include "libcomp2300/macros.S"
+.include "src/libcomp2300/macros.S"
 
 @ --------------------- Implementation --------------------
 .type joystick_init, %function

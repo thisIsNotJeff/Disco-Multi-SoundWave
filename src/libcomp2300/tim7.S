@@ -11,7 +11,7 @@
 .global tim7_init, TIM7_IRQHandler
 
 @ --------------------- Implementation --------------------
-.include "libcomp2300/macros.S"
+.include "src/libcomp2300/macros.S"
 
 .set CK_PSC, 80000000
 

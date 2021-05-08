@@ -7,7 +7,7 @@
 .global NVIC_IPR_set_priority, SHPR_set_priority
 
 @ --------------------- Implementation --------------------
-.include "libcomp2300/macros.S"
+.include "src/libcomp2300/macros.S"
 
 .type sync, %function
 @ wastes some cpu cycles to make sure that memory operations / wire operations
