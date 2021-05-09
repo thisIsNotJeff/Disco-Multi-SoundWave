@@ -4,11 +4,6 @@ constructs will be taught eventually, so you might not understand everything at 
 Don't add anything here, put your own source files in the src folder.
 
 
-## libcomp2300/
-
-Various utility functions and macros for you to use
-
-
 ## audio.S
 
 Audio configuration functions.
@@ -16,7 +11,7 @@ Audio configuration functions.
 
 ## clock.S
 
-Clock configuration functions. Primarily used to raise the CPU clock speed from 4MHz to 80MHz.
+Clock configuration functions. Primarily used to raise the CPU clock speed from 4MHz to 80MHz and set up the audio peripheral clocks for a 48kHz sample rate.
 
 
 ## init.S
