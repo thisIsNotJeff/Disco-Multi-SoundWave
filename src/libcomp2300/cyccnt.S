@@ -10,23 +10,6 @@
 @ of clock cycles into r0. for more information refer to pages 797 - 801
 @ of the ARMv7-m Architecture Reference Manual
 
-@ if you're using the macros don't forget to add '.include "libcomp2300/cyccnt.S"' in
-@ your main file
-
-@ A macro to read the current value of the cycle count register
-@ returns the current value in r0
-.macro CYCCNT_read_M
-  ldr r0, =#0xE0001004
-  ldr r0, [r0]
-.endm
-
-@ A macro to reset the cycle count register back to 0
-.macro CYCCNT_reset_M
-  ldr r0, =#0xE0001004 @ address to the DWT_CYCCNT register
-  mov r1, #0
-  str r1, [r0]
-.endm
-
 @ A function to initialise the cycle count register
 .type CYCCNT_init, %function
 CYCCNT_init: @ sets up the Cycle Count Register

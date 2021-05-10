@@ -243,3 +243,22 @@
   SYSCFG_EXTIxCR_write \port \pin
   EXTI_IMR_enable \pin
 .endm
+
+@ Cycle counting
+@ See cyccnt.S for details
+
+@ A macro to read the current value of the cycle count register
+@ returns the current value in r0
+@ Corresponds to CYCCNT_read
+.macro CYCCNT_read_M
+  ldr r0, =#0xE0001004
+  ldr r0, [r0]
+.endm
+
+@ A macro to reset the cycle count register back to 0
+@ Corresponds to CYCCNT_reset
+.macro CYCCNT_reset_M
+  ldr r0, =#0xE0001004 @ address to the DWT_CYCCNT register
+  mov r1, #0
+  str r1, [r0]
+.endm
