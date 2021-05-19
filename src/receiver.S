@@ -1,5 +1,7 @@
 .syntax unified
 
+.include "src/libcomp2300/macros.S"
+
 .type play_note, %function
 play_note:
   ldr r0 =pitch_sequence
