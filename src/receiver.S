@@ -3,8 +3,9 @@
 .include "src/libcomp2300/macros.S"
 
 @ This function will play the notes based on the
-@ current index at the p 
-@
+@ current index at first byte of the pitch_sequencer_receiver
+@ --parameters--
+@ r0: amplitude
 .type play_note, %function
 play_note:
   ldr r0, =pitch_sequence_receiver

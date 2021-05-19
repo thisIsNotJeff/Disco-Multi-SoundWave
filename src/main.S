@@ -75,7 +75,7 @@ next_index:
 
   to_index_0:
     mov r1, 0
-    strb r1 [r0]
+    strb r1, [r0]
     bx lr
 
 
