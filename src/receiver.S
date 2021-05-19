@@ -20,6 +20,7 @@ play_note:
 
   output_note:
     ldr r2, [r0, #2] @ r2 <- frequency * 100
+    
 
 
 @ handler for both note on and off line 

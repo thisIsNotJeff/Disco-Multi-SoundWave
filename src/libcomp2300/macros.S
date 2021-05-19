@@ -269,6 +269,6 @@
 @ This marco is used as an if-then-else statement.
 .macro if condition_code condition then_label else_label
     \condition_code
-    b\condition then_label\
+    b\condition \then_label
     b \else_label
 .endm  
