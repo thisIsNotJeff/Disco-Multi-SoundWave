@@ -3,11 +3,11 @@
 .include "src/libcomp2300/macros.S"
 
 @ This function will play the notes based on the
-@ index 
+@ current index at the p 
 @
 .type play_note, %function
 play_note:
-  ldr r0, =pitch_sequence
+  ldr r0, =pitch_sequence_receiver
   ldrb r1, [r0], #1 @ <- r1 has the index of current note
   
   find_note:
@@ -23,6 +23,7 @@ play_note:
 
   output_note:
     ldr r2, [r0, #2] @ r2 <- frequency * 100
+
 
 
 
