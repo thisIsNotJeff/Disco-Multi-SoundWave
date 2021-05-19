@@ -5,9 +5,10 @@
 @ This function will play the notes based on the
 @ current index at first byte of the pitch_sequencer_receiver
 @ --parameters--
-@ r0: amplitude
+@ r0: amplitude of the sawtooth wave to be played.
 .type play_note, %function
 play_note:
+  push {r0}
   ldr r0, =pitch_sequence_receiver
   ldrb r1, [r0], #1 @ <- r1 has the index of current note
   
@@ -24,6 +25,7 @@ play_note:
 
   output_note:
     ldr r2, [r0, #2] @ r2 <- frequency * 100
+
 
 
 
@@ -55,7 +57,7 @@ EXTI0_IRQHandler:
 EXTI1_IRQHandler:
   push {lr}
   EXTI_PR_clear_pending 1
-  ldr r0, =pitch_sequence
+  ldr r0, =pitch_sequence_receiver
   bl next_index
   pop {lr}
   bx lr
