@@ -262,3 +262,13 @@
   mov r1, #0
   str r1, [r0]
 .endm
+
+
+
+
+@ This marco is used as an if-then-else statement.
+.macro if condition_code condition then_label else_label
+    \condition_code
+    b\condition then_label\
+    b \else_label
+.endm  
