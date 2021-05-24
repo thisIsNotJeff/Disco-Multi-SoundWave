@@ -106,16 +106,30 @@ TIM7_IRQHandler:
   push {lr}
 
   @ Your interrupt handler code goes here
+  GPIOx_ODR_clear E, 12 @ turn off the sound first.
+
+  ldr r0, =utility_room
+  ldr r1, [r0, #8]
+
+  cmp r1, #0
+  beq to_play_song
+  b clean_up
 
 
-  @ Clear interrupt (Section 29.4.4)
-  ldr r0, =ADR_TIM7
-  ldr r1, =OFS_TIMx_SR
-  mov r2, 0
-  bl clear_bit
+  to_play_song:
+    bl play_song
 
-  bl sync
+  clean_up:
+    @ Clear interrupt (Section 29.4.4)
+    ldr r0, =ADR_TIM7
+    ldr r1, =OFS_TIMx_SR
+    mov r2, 0
+    bl clear_bit
 
+    bl sync
+
+  bl count_down @ after 0.25 seconds interrupt will be triggered again. 
+  
   pop {lr}
   bx lr
 .size TIM7_IRQHandler, .-TIM7_IRQHandler

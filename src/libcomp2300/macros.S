@@ -103,6 +103,14 @@
     bl clear_bit
 .endm
 
+@ add read for GPIOx_ODR
+.macro GPIOx_ODR_read port pin
+    ldr r0, =ADR_GPIO\port
+    ldr r1, =OFS_GPIOx_ODR
+    ldr r2, =\pin
+    bl read_bit
+.endm
+
 .macro GPIOx_ODR_toggle port pin
     ldr r0, =ADR_GPIO\port
     ldr r1, =OFS_GPIOx_ODR

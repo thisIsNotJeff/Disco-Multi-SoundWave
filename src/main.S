@@ -7,12 +7,49 @@
 main:
   bl init
 
-  ldr r0, = 20000
-  ldr r1, = 0x7fff
-  bl wave_change
-  play:
-    bl wave_play_next_sample
-    b play
+  bl configure_lines
+
+  ldr r0, =pitch_sequence_sender @ r0 <- start address of pitch_sequence_sender.
+  @ end address of pitch_sequence_sender in r1.
+  add r1, r0, 19 @ there are 19 elements of a byte, so the size is just 19.
+
+  @ store them in a specific location to use later.
+  ldr r2, =utility_room
+  str r0, [r2] 
+  str r1, [r2, #4]
+
+  init_song_via_pin_sender:
+    bl play_song
+    GPIOx_ODR_set E, 12
+    bl count_down
+
+  init_receiver:
+    b play_note
+
+
+
+  @ ldr r1, =8
+  @ ldr r2, =7
+
+  @ if "cmp r1, #7", eq, then, else
+
+  @ then:
+  @   mov r3, #1
+  @   b end
+
+  @ else:
+  @   mov r3, #0 
+  @   b end
+  @ end:
+  @   nop
+  @   b end  
+
+  @ ldr r0, = 44000
+  @ ldr r1, = 0x7fff
+  @ bl wave_change
+  @ play:
+  @   bl wave_play_next_sample
+  @   b play
 
 .size main, .-main
 
@@ -59,19 +96,21 @@ configure_lines:
 .global next_index
 .type next_index, %function
 next_index:
-  @ ldr r0, =pitch_sequence
-  @ find out the currently note index
+
+  @ find out the current note index
   ldrb r1, [r0]
   @ if it's already the last note
   @ then roll back to the index 0.
-  cmp r1, #7
-  beq to_index_0
-
-  @ else pick the next note
-  add r1, 1
-  @ update the index
-  strb r1, [r0]
-  bx lr
+  if "cmp r1, #7", eq, to_index_0, increase_index
+  @ cmp r1, #7
+  @ beq to_index_0
+  
+  increase_index:
+    @ else pick the next note
+    add r1, 1
+    @ update the index
+    strb r1, [r0]
+    bx lr
 
   to_index_0:
     mov r1, 0
