@@ -9,24 +9,6 @@
 .global play_note
 .type play_note, %function
 play_note:
-  @ ldr r1, =pitch_sequence_receiver
-  @ ldrb r2, [r1], #1 @ <- r2 has the index of current note
-  
-  @ find_note:
-  @   @ compare the current index with index in the sequene
-  @   @ out put the node when the note is found.
-  @   ldrh r3, [r1]
-
-  @   if "cmp r2, r3", eq, output_note, find_next
-  @   @ cmp r2, r3
-  @   @ beq output_note
-
-  @   find_next:
-  @     @else find next index in the sequence
-  @     add r1, 4 @update pointer
-  @     b find_note
-
-  
     bl find_pitch @ r0 <- frequency of the current pitch index. 
 
     ldr r1, =current_amplitude
@@ -77,12 +59,14 @@ play_note:
 @ r0: pitch (frequence * 100) of the current pitch index.
 .type find_pitch, %function
 find_pitch:
+  ldr r0, =current_pitch_index_receiver
+  ldrb r1, [r0] @ r1 <- current pitch index.
+
   ldr r0, =pitch_sequence_receiver
-  ldrb r1, [r0], #1 @ r1 <- current pitch index.
 
   find:
     @ compare the current index with index in the pitch_sequence_receiver.
-    ldrh r2, [r0] @ r2 <- pitch index in the pitch_sequence_receiver.
+    ldrh r2, [r0] @ r2 <- pitch index in the current_pitch_sequence_receiver.
 
     if "cmp r1, r2", eq, return_pitch, find_next
 
@@ -133,15 +117,14 @@ EXTI0_IRQHandler:
 EXTI1_IRQHandler:
   push {lr}
   EXTI_PR_clear_pending 1
-  ldr r0, =pitch_sequence_receiver
+  ldr r0, =current_pitch_index_receiver
   bl next_index
   pop {lr}
   bx lr
 
 .data
-@ pitch sequence table in p2300
+@ pitch sequence table in p2300.
 pitch_sequence_receiver:
-  .byte 0 @ this is the index of the note currently playing (This is only visable in the receiver's side)
   .hword 0, 22000  @ First half-word in is pitch sequence index,seconde half-word is the corresponding pitch.
   .hword 1, 24694
   .hword 2, 26163
@@ -150,6 +133,10 @@ pitch_sequence_receiver:
   .hword 5, 36999
   .hword 6, 39200
   .hword 7, 44000
+
+@ current pitch index for receiver's side.
+current_pitch_index_receiver:
+  .byte 0 @ this is the index of the note currently playing (This is only visable in the receiver's side)
 
 current_amplitude:
   .hword 0  

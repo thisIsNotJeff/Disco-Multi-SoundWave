@@ -28,15 +28,6 @@ main:
   init_receiver:
     b play_note
 
-
-  @ ldr r0, = 22000
-  @ ldr r1, = 0x7fff
-  @ bl wave_change
-  @ bl count_down
-  @ play:
-  @   bl wave_play_next_sample
-  @   b play
-
 .size main, .-main
 
 
