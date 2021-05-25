@@ -136,8 +136,8 @@ play_song:
 .type count_down, % function
 count_down:
   push {lr}
-  ldr r0, =50000
-  ldr r1, =400
+  ldr r0, =5000
+  ldr r1, =4000
   bl tim7_init
   pop {lr}
   bx lr

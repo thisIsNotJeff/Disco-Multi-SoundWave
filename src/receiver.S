@@ -9,35 +9,93 @@
 .global play_note
 .type play_note, %function
 play_note:
-  ldr r1, =pitch_sequence_receiver
-  ldrb r2, [r1], #1 @ <- r2 has the index of current note
+  @ ldr r1, =pitch_sequence_receiver
+  @ ldrb r2, [r1], #1 @ <- r2 has the index of current note
   
-  find_note:
-    @ compare the current index with index in the sequene
-    @ out put the node when the note is found.
-    ldrh r3, [r1]
+  @ find_note:
+  @   @ compare the current index with index in the sequene
+  @   @ out put the node when the note is found.
+  @   ldrh r3, [r1]
 
-    if "cmp r2, r3", eq, output_note, find_next
-    @ cmp r2, r3
-    @ beq output_note
+  @   if "cmp r2, r3", eq, output_note, find_next
+  @   @ cmp r2, r3
+  @   @ beq output_note
+
+  @   find_next:
+  @     @else find next index in the sequence
+  @     add r1, 4 @update pointer
+  @     b find_note
+
+  
+    bl find_pitch @ r0 <- frequency of the current pitch index. 
+
+    ldr r1, =current_amplitude
+    ldrh r2, [r1] 
+    mov r1, r2 @ r1 <- current amplitude of wave.
+
+    push {r0,r1} @ save the amplitude and frequency on the stack.
+
+    bl wave_change @ don't need to change wave every cycle, otherwise the wave is not a wave  at all!!
+
+    b output_note @ jump right to play the node, since it's safe to assume the amplitude and pitch are up-to-date.
+
+    maintain_output_note:
+
+    ldr r1, =current_amplitude
+    ldrh r3, [r1] @ the current amplitude, it could be changed due to the pitch on/off interruption
+
+    bl find_pitch @ the current pitch, it could be changed due to the pitch change interruption.
+    mov r2, r0
+    pop {r0,r1}
+
+    cmp r0, r2 @ check if the last pitch is the same as the current one.
+    bne update_wave
+
+    cmp r1, r3 @ check if the last amplitude is the same as the current one.
+    beq push_before_output_note
+
+    update_wave:
+      mov r0, r2
+      mov r1, r3
+      push {r0,r1} @ save the new pitch and amplitude on the stack.
+      bl wave_change @ change the wave into the new one.
+      b output_note
+
+    push_before_output_note:
+      push {r0,r1}
+
+    output_note:
+      bl wave_play_next_sample
+      b maintain_output_note @ don't need to change wave every cycle, otherwise the wave is not a wave  at all!!
+
+
+@ This function will find the pitch of the current pitch index
+@ in the pitch_sequence_receiver.
+@ --parameters--
+@ none
+@ --return--
+@ r0: pitch (frequence * 100) of the current pitch index.
+.type find_pitch, %function
+find_pitch:
+  ldr r0, =pitch_sequence_receiver
+  ldrb r1, [r0], #1 @ r1 <- current pitch index.
+
+  find:
+    @ compare the current index with index in the pitch_sequence_receiver.
+    ldrh r2, [r0] @ r2 <- pitch index in the pitch_sequence_receiver.
+
+    if "cmp r1, r2", eq, return_pitch, find_next
 
     find_next:
       @else find next index in the sequence
-      add r1, 4 @update pointer
-      b find_note
+      add r0, 4 @update pointer
+      b find
+    
+    return_pitch:
+      ldrh r1, [r0, #2]
+      mov r0, r1 @ leave correct pitch in r0.
+      bx lr 
 
-  output_note:
-    ldr r3, [r1, #2] @ r3 <- frequency * 100
-
-    ldr r0, =current_amplitude
-    ldrh r1, [r0] @ r1 <- current amplitude of wave.
-    mov r1, r0 @ r1 <- amplitude
-    mov r0, r3 
-    bl wave_change
-
-    maintain_output_node:
-    bl wave_play_next_sample
-    b play_note
 
 @ handler for both note on and off line 
 .global EXTI0_IRQHandler
@@ -71,7 +129,7 @@ EXTI0_IRQHandler:
   
 @ handler for pitch change line  
 .global EXTI1_IRQHandler
-.type EXTI0_IRQHandler, %function
+.type EXTI1_IRQHandler, %function
 EXTI1_IRQHandler:
   push {lr}
   EXTI_PR_clear_pending 1

@@ -18,6 +18,8 @@ main:
   str r0, [r2] 
   str r1, [r2, #4]
 
+
+
   init_song_via_pin_sender:
     bl play_song
     GPIOx_ODR_set E, 12
@@ -27,26 +29,10 @@ main:
     b play_note
 
 
-
-  @ ldr r1, =8
-  @ ldr r2, =7
-
-  @ if "cmp r1, #7", eq, then, else
-
-  @ then:
-  @   mov r3, #1
-  @   b end
-
-  @ else:
-  @   mov r3, #0 
-  @   b end
-  @ end:
-  @   nop
-  @   b end  
-
-  @ ldr r0, = 44000
+  @ ldr r0, = 22000
   @ ldr r1, = 0x7fff
   @ bl wave_change
+  @ bl count_down
   @ play:
   @   bl wave_play_next_sample
   @   b play
@@ -81,9 +67,22 @@ configure_lines:
   @ set pitch change trigger
   EXTI_set_rising_edge_trigger 1
   
+
   @ enable interrupt for both receiver.
   NVIC_set ISER 6
   NVIC_set ISER 7
+
+  @ set inetrrupt priority
+  @ give pitch change higher priority than pitch on/off (while tim7 having the lowest highest)
+  mov r0, 7
+  mov r1, 0b0000
+  bl NVIC_IPR_set_priority
+
+  mov r0, 6
+  mov r1, 0b0001
+  bl NVIC_IPR_set_priority
+
+
   pop {lr}
   bx lr
 

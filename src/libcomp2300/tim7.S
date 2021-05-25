@@ -93,6 +93,10 @@ tim7_init:
   @ NOTE: you MAY want to configure the priority of TIM7.
   @ put your code here if that's the case
 
+  mov r0, 55
+  mov r1, 0b0010 @ give the tim7 lowest priority.
+
+  bl NVIC_IPR_set_priority 
 
   bl sync
   pop {r4-r5, lr}
@@ -106,18 +110,25 @@ TIM7_IRQHandler:
   push {lr}
 
   @ Your interrupt handler code goes here
+
   GPIOx_ODR_clear E, 12 @ turn off the sound first.
 
   ldr r0, =utility_room
-  ldr r1, [r0, #8]
+  ldrb r1, [r0, #8]
 
   cmp r1, #0
   beq to_play_song
-  b clean_up
 
+  update_last_wave:
+    @ this time we remain slient.
+    mov r1, 0
+    strb r1, [r0, #8]
+    b clean_up
 
   to_play_song:
     bl play_song
+    GPIOx_ODR_set E, 12
+    
 
   clean_up:
     @ Clear interrupt (Section 29.4.4)
@@ -128,7 +139,7 @@ TIM7_IRQHandler:
 
     bl sync
 
-  bl count_down @ after 0.25 seconds interrupt will be triggered again. 
+  @ bl count_down @ after 0.25 seconds interrupt will be triggered again. 
   
   pop {lr}
   bx lr
