@@ -18,8 +18,6 @@ main:
   str r0, [r2] 
   str r1, [r2, #4]
 
-
-
   init_song_via_pin_sender:
     bl play_song
     GPIOx_ODR_set E, 12

@@ -23,7 +23,7 @@ play_song:
 
     start_over:
       ldr r2, =pitch_sequence_sender
-      b adjust_current_pitch_index_sender
+      @ b adjust_current_pitch_index_sender
 
     is_index_equal:
       ldrb r0, [r2]  @ r0 <- the pitch index of the pitch in the sequence should be played on the receiver's side 
@@ -44,7 +44,7 @@ play_song:
       GPIOx_ODR_set E, 13 @ to next pitch.
       GPIOx_ODR_clear E, 13 @ clear it to trigger interrupt next time.
       pop {r1,r2}
-      
+
       b is_index_equal
 
     play_note_by_sending_signal:
