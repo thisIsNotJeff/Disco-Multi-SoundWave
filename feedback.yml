@@ -1,0 +1,4 @@
+feedback: |-
+  Your design is interesting in that you created a more defined separation between your sender and receiver. Your use of the if macro was interesting and it changed the way you interpret and read your code. I think, generally, be cautious of macros, but in this case I can see why you chose to use this approach.
+
+  You implemented the protocol well and everything works as expected, well done.
